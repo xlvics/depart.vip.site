@@ -149,11 +149,23 @@
             right: 0;
         }
         .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 1.8em;
             margin-bottom: 10px;
-            text-align: center;
             padding-bottom: 10px;
             border-bottom: 2px solid white;
+        }
+        .close-menu-btn {
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .close-menu-btn:hover {
+            background-color: rgba(255,255,255,0.1);
         }
         .mobile-btn-container {
             display: flex;
@@ -204,7 +216,10 @@
     </header>
 
     <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">depart.vip</div>
+        <div class="mobile-menu-header">
+            <span>depart.vip</span>
+            <span class="close-menu-btn" onclick="toggleMenu()">×</span>
+        </div>
         <div class="mobile-btn-container">
             <div class="mobile-btn" onclick="showSection('script'); toggleMenu();">Get Script</div>
             <div class="mobile-btn" onclick="showSection('about'); toggleMenu();">About Us</div>
