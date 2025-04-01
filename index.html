@@ -15,6 +15,13 @@
             flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
+            filter: blur(5px);
+            opacity: 0;
+            transition: filter 3s ease, opacity 3s ease;
+        }
+        body.loaded {
+            filter: blur(0);
+            opacity: 1;
         }
         header {
             background-color: #000000;
@@ -28,7 +35,7 @@
         }
         h1 {
             margin: 0;
-            font-size: 1.25em; /* Half the original size */
+            font-size: 1.25em;
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
         .menu-toggle {
@@ -101,6 +108,7 @@
             backdrop-filter: blur(5px);
             width: 100%;
             box-sizing: border-box;
+            cursor: pointer;
         }
         .btn:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -129,12 +137,29 @@
             margin-top: auto;
             border-top: 1px solid rgba(255,255,255,0.1);
             transition: filter 0.3s;
-            font-size: 0.625em; /* Half of 1.25em */
+            font-size: 0.625em;
         }
         .credits {
             margin-top: 10px;
             font-size: 0.625em;
             color: rgba(255,255,255,0.7);
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid white;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .toast.show {
+            opacity: 1;
         }
         @media (min-width: 600px) {
             .btn {
@@ -218,6 +243,7 @@
 </head>
 <body>
     <div class="overlay" id="overlay"></div>
+    <div class="toast" id="toast">Discord link copied to clipboard!</div>
 
     <header>
         <h1>depart.vip</h1>
@@ -236,7 +262,7 @@
         <div class="mobile-btn-container">
             <div class="mobile-btn" onclick="showSection('script'); toggleMenu();">Get Script</div>
             <div class="mobile-btn" onclick="showSection('about'); toggleMenu();">About Us</div>
-            <div class="mobile-btn" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank');">Our Discord!</div>
+            <div class="mobile-btn" onclick="handleDiscordClick();">Our Discord!</div>
         </div>
     </div>
 
@@ -248,7 +274,7 @@
         <div class="button-container">
             <div class="top-buttons">
                 <button class="btn" onclick="showSection('script')">Get Script</button>
-                <button class="btn" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank')">Our Discord!</button>
+                <button class="btn" onclick="handleDiscordClick()">Our Discord!</button>
             </div>
             <button class="btn" onclick="showSection('about')">About Us</button>
         </div>
@@ -270,6 +296,37 @@
     </footer>
 
     <script>
+        // Page load transition
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+        });
+
+        // Discord link handling
+        function handleDiscordClick() {
+            const discordUrl = 'https://discord.gg/ufJzDKBrvF';
+            
+            // Open Discord in new tab
+            window.open(discordUrl, '_blank');
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(discordUrl).then(function() {
+                showToast('Discord link copied to clipboard!');
+            }).catch(function() {
+                showToast('Failed to copy link');
+            });
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(function() {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
         function showSection(sectionId) {
             // Hide all sections first
             document.querySelectorAll('.content-section').forEach(section => {
