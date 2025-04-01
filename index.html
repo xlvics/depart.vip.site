@@ -9,21 +9,25 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #000000;
+            color: white;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
         header {
-            background-color: #2c3e50;
+            background-color: #000000;
             color: white;
             padding: 20px 0;
             text-align: center;
+            border: 2px solid white;
+            margin: 10px;
+            border-radius: 5px;
         }
         h1 {
             margin: 0;
             font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
         .container {
             max-width: 800px;
@@ -41,51 +45,41 @@
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #3498db;
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
             text-decoration: none;
             border-radius: 5px;
             font-size: 1.1em;
-            transition: background-color 0.3s;
-            border: none;
-            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
         }
         .btn:hover {
-            background-color: #2980b9;
-        }
-        /* Different colors for each button */
-        .btn-script {
-            background-color: #27ae60;
-        }
-        .btn-script:hover {
-            background-color: #219653;
-        }
-        .btn-about {
-            background-color: #9b59b6;
-        }
-        .btn-about:hover {
-            background-color: #8e44ad;
-        }
-        .btn-connect {
-            background-color: #e67e22;
-        }
-        .btn-connect:hover {
-            background-color: #d35400;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         .content-section {
             margin-top: 50px;
-            padding: 20px;
-            background-color: white;
+            padding: 30px;
+            background-color: rgba(0,0,0,0.7);
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(255,255,255,0.1);
             display: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         footer {
-            background-color: #2c3e50;
+            background-color: #000000;
             color: white;
             text-align: center;
             padding: 20px 0;
             margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         @media (min-width: 600px) {
             .button-container {
@@ -102,14 +96,14 @@
     
     <div class="container">
         <div class="button-container">
-            <button class="btn btn-script" onclick="showSection('script')">Get Script</button>
-            <button class="btn btn-about" onclick="showSection('about')">About Us</button>
-            <button class="btn btn-connect" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank')">Connect With Us</button>
+            <button class="btn" onclick="showSection('script')">Get Script</button>
+            <button class="btn" onclick="showSection('about')">About Us</button>
+            <button class="btn" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank')">Our Discord!</button>
         </div>
 
         <div id="script" class="content-section">
             <h2>Coming Soon!</h2>
-            <p>Our script will be available soon!. Stay tuned for all updates!</p>
+            <p>Our script will be available soon. Stay tuned for updates!</p>
         </div>
 
         <div id="about" class="content-section">
@@ -135,8 +129,6 @@
                 section.style.display = 'block';
             }
         }
-
-        
     </script>
 </body>
 </html>
