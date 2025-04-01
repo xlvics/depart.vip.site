@@ -14,6 +14,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         header {
             background-color: #000000;
@@ -38,12 +39,23 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            z-index: 10;
         }
         .menu-line {
             width: 25px;
             height: 3px;
             background-color: white;
             border-radius: 3px;
+            transition: all 0.3s;
+        }
+        .menu-toggle.active .menu-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .menu-toggle.active .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.active .menu-line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
         }
         .description {
             margin: 20px auto;
@@ -59,6 +71,10 @@
             padding: 0 20px;
             text-align: center;
             flex: 1;
+            transition: filter 0.3s;
+        }
+        .blur-content {
+            filter: blur(5px);
         }
         .button-container {
             display: flex;
@@ -104,6 +120,7 @@
             padding: 20px 0;
             margin-top: auto;
             border-top: 1px solid rgba(255,255,255,0.1);
+            transition: filter 0.3s;
         }
         @media (min-width: 600px) {
             .button-container {
@@ -111,39 +128,72 @@
                 justify-content: center;
             }
         }
+        /* Hamburger Menu Styles */
         .mobile-menu {
-            display: none;
+            position: fixed;
+            top: 0;
+            right: -50%;
+            width: 50%;
+            height: 100%;
+            background-color: #000;
+            border-left: 2px solid white;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        .mobile-menu.show {
+            right: 0;
+        }
+        .mobile-menu-header {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid white;
+        }
+        .mobile-btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .mobile-btn {
+            padding: 15px;
+            background-color: #000;
+            color: white;
+            border: 2px solid white;
+            border-radius: 5px;
+            font-size: 1.1em;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .mobile-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 100;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 99;
+            display: none;
         }
-        .mobile-menu.show {
-            display: flex;
-        }
-        .mobile-btn {
-            padding: 15px 30px;
-            font-size: 1.5em;
-            width: 80%;
-            max-width: 300px;
-        }
-        .close-menu {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            font-size: 2em;
-            cursor: pointer;
+        .overlay.show {
+            display: block;
         }
     </style>
 </head>
 <body>
+    <div class="overlay" id="overlay"></div>
+
     <header>
         <h1>depart.vip</h1>
         <div class="menu-toggle" onclick="toggleMenu()">
@@ -154,17 +204,19 @@
     </header>
 
     <div class="mobile-menu" id="mobileMenu">
-        <span class="close-menu" onclick="toggleMenu()">×</span>
-        <button class="btn mobile-btn" onclick="showSection('script'); toggleMenu();">Get Script</button>
-        <button class="btn mobile-btn" onclick="showSection('about'); toggleMenu();">About Us</button>
-        <button class="btn mobile-btn" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank');">Our Discord!</button>
+        <div class="mobile-menu-header">depart.vip</div>
+        <div class="mobile-btn-container">
+            <div class="mobile-btn" onclick="showSection('script'); toggleMenu();">Get Script</div>
+            <div class="mobile-btn" onclick="showSection('about'); toggleMenu();">About Us</div>
+            <div class="mobile-btn" onclick="window.open('https://discord.gg/ufJzDKBrvF', '_blank');">Our Discord!</div>
+        </div>
     </div>
 
     <div class="description">
         depart.vip, an upcoming script for skywars and bedwars
     </div>
     
-    <div class="container">
+    <div class="container" id="mainContent">
         <div class="button-container">
             <button class="btn" onclick="showSection('script')">Get Script</button>
             <button class="btn" onclick="showSection('about')">About Us</button>
@@ -202,7 +254,22 @@
 
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.getElementById('mainContent');
+            const footer = document.querySelector('footer');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
             menu.classList.toggle('show');
+            overlay.classList.toggle('show');
+            menuToggle.classList.toggle('active');
+            
+            if (menu.classList.contains('show')) {
+                mainContent.classList.add('blur-content');
+                footer.classList.add('blur-content');
+            } else {
+                mainContent.classList.remove('blur-content');
+                footer.classList.remove('blur-content');
+            }
         }
     </script>
 </body>
